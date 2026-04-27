@@ -11,7 +11,6 @@ const PANEL_URL = 'https://panel.magmanode.com';
 
 const bot = new TelegramBot(BOT_TOKEN, { polling: true });
 
-// منع توقف البوت عند حدوث أخطاء في النت
 process.on('unhandledRejection', (reason) => console.log('⚠️ خطأ بالنت:', reason));
 
 const controlMagma = async (action) => {
@@ -33,11 +32,40 @@ const initMinecraftBot = () => {
     });
 
     mcBot.on('login', () => {
-        bot.sendMessage(ADMIN_ID, "✅ يوسف، دخلت للسيرفر وكل شي لوز!");
+        bot.sendMessage(ADMIN_ID, "✅ يوسف، دخلت للسيرفر وبدأت الاستعراض! 🕺");
+    });
+
+    // === نظام الحركات الاحترافية (Anti-AFK Pro) ===
+    mcBot.on('spawn', () => {
+        console.log('🤖 BalaBot بدأ المهرجان...');
+        
+        setInterval(() => {
+            if (mcBot.entity) {
+                // 1. يطفر
+                mcBot.setControlState('jump', true);
+                setTimeout(() => mcBot.setControlState('jump', false), 500);
+
+                // 2. يضرب (بوكس بالهوا)
+                mcBot.swingArm();
+
+                // 3. يمشي يمنة ويسرة
+                mcBot.setControlState('left', true);
+                setTimeout(() => {
+                    mcBot.setControlState('left', false);
+                    mcBot.setControlState('right', true);
+                    setTimeout(() => mcBot.setControlState('right', false), 500);
+                }, 500);
+
+                // 4. يباوع يمنة ويسرة (تغيير زاوية الكاميرا)
+                const currentYaw = mcBot.entity.yaw;
+                mcBot.look(currentYaw + 0.5, mcBot.entity.pitch);
+                setTimeout(() => mcBot.look(currentYaw - 0.5, mcBot.entity.pitch), 1000);
+            }
+        }, 20000); // يسوي هالحركات كل 20 ثانية حتى يضل نشط
     });
 
     mcBot.on('end', async () => {
-        bot.sendMessage(ADMIN_ID, "⚠️ السيرفر طفى! دا أحاول أشغله...");
+        bot.sendMessage(ADMIN_ID, "⚠️ البوت فصل! دا أحاول أشغل السيرفر وأرجع...");
         if (await controlMagma('start')) {
             setTimeout(initMinecraftBot, 120000); 
         }
@@ -46,10 +74,8 @@ const initMinecraftBot = () => {
     mcBot.on('error', (err) => console.log('MC Error:', err.message));
 };
 
-// تشغيل الـ AFK بوت
 setTimeout(initMinecraftBot, 5000); 
 
-// إعداد Railway
 const app = express();
-app.get('/', (req, res) => res.send('Bala Bot Running!'));
+app.get('/', (req, res) => res.send('Bala Bot is Dancing!'));
 app.listen(process.env.PORT || 3000);
