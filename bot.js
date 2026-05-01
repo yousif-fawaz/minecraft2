@@ -69,7 +69,7 @@ const initMinecraftBot = () => {
         host: 'gold.magmanode.com',
         port: 27891,
         username: 'BalaBot',
-        version: '1.21.1' // تأكد من إصدار السيرفر
+        version: '1.21.11' // تأكد من إصدار السيرفر
     });
 
     mcBot.on('login', () => {
