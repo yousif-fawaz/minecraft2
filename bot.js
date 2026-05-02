@@ -66,8 +66,8 @@ const handleRestart = async () => {
 const initMinecraftBot = () => {
     console.log('🤖 جاري محاولة الدخول للسيرفر...');
     const mcBot = mineflayer.createBot({
-        host: 'gold.magmanode.com',
-        port: 27891,
+        host: '911gt3rs.sdlf.fun',
+        port: 25565,
         username: 'BalaBot',
         version: '1.21.11' // تأكد من إصدار السيرفر
     });
